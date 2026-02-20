@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Prediction System</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 35px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 20px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .form-group { margin-bottom: 15px; }
+        .full-width { grid-column: span 2; }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #495057;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        button {
+            flex: 2;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button[type="reset"] {
+            flex: 1;
+            background-color: #6c757d;
+        }
+        .prediction-result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        /* Color Logic Classes */
+        .result-danger { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .result-safe { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Heart Disease Analysis</h2>
+    <form action="/predict" method="POST">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" name="age" required>
+            </div>
+            <div class="form-group">
+                <label>Sex</label>
+                <select name="sex" required>
+                    <option value="1">Male</option>
+                    <option value="0">Female</option>
+                </select>
+            </div>
+            <div class="form-group full-width">
+                <label>Chest Pain Type</label>
+                <select name="chest_pain_type" required>
+                    <option value="1">Typical Angina</option>
+                    <option value="2">Atypical Angina</option>
+                    <option value="3">Non-anginal Pain</option>
+                    <option value="4">Asymptomatic</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Resting BP (mm Hg)</label>
+                <input type="number" name="resting_bp_s" required>
+            </div>
+            <div class="form-group">
+                <label>Cholesterol (mg/dl)</label>
+                <input type="number" name="cholesterol" required>
+            </div>
+            <div class="form-group">
+                <label>Fasting Sugar > 120</label>
+                <select name="fasting_blood_sugar" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Resting ECG</label>
+                <select name="resting_ecg" required>
+                    <option value="0">Normal</option>
+                    <option value="1">ST-T Abnormality</option>
+                    <option value="2">LV Hypertrophy</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Max Heart Rate</label>
+                <input type="number" name="max_heart_rate" required>
+            </div>
+            <div class="form-group">
+                <label>Exercise Angina</label>
+                <select name="exercise_angina" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Oldpeak (ST Dep.)</label>
+                <input type="number" step="0.1" name="oldpeak" required>
+            </div>
+            <div class="form-group">
+                <label>ST Slope</label>
+                <select name="ST_slope" required>
+                    <option value="0">Normal </option>
+                    <option value="1">Upsloping </option>
+                    <option value="2">Flat </option>
+                    <option value="3">Downsloping </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button type="reset">Clear</button>
+            <button type="submit">Analyze</button>
+        </div>
+    </form>
+
+    {% if prediction_text %}
+        {% if "unlikely" in prediction_text %}
+            <div class="prediction-result result-safe">
+                {{ prediction_text }}
+            </div>
+        {% else %}
+            <div class="prediction-result result-danger">
+                {{ prediction_text }}
+            </div>
+        {% endif %}
+    {% endif %}
+
+</div>
+</body>
+</html>
